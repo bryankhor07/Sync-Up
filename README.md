@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sync Up 📅 
 
-## Getting Started
+Sync Up is a simple and efficient calendar app that helps you manage your events, meetings, and schedules with ease. Stay organized and never miss an important date again!
 
-First, run the development server:
+https://sync-up.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📑 Table of Contents
+- [Introduction](#introduction)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Screenshots](#screenshots)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Introduction
+ 
+Sync Up makes scheduling effortless by combining a clean interface with powerful features.
+It’s built on a modern, production-ready stack that includes:
 
-## Learn More
+⚡ Neon for real-time Postgres database updates
 
-To learn more about Next.js, take a look at the following resources:
+🔐 Clerk for seamless authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+⚛️ Next.js for a fast, scalable frontend experience
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Whether you’re planning events, managing meetings, or sharing availability, Sync Up helps you stay on track.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
+- **Next.js (App Router)** – React framework with file‑based routing & server components
+- **Neon** – Hosted Postgres with real-time sync
+- **Clerk** – Authentication & user management
+- **TailwindCSS** – Utility-first styling & responsive design  
+- **TypeScript** – Strongly typed codebase for reliability  
+- **Vercel** – Hosting & serverless deployment platform
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## ✨ Features
+- 📅 **Event Management** - Create, update, and delete events with ease
+- 🗓️ **Smart Scheduling** - Share availability and let others book time slots
+- 🔔 **Google Calendar Integration** - Receive automatic calendar invites with reminders after booking
+- 👤 **Public Profiles** - Share your booking link with others
+- 🔒 **Secure Auth** - Sign up / log in with Clerk
+- 🚀 **One‑Click Deployment** - Deploy the app on Vercel with environment variables for Supabase & Clerk.
+- 📊 **Responsive UI** — Works seamlessly across devices  
+ 
+
+---
+
+## 📸 Screenshots
+
+<img width="1912" height="851" alt="image" src="https://github.com/user-attachments/assets/bcd61992-89d0-40e5-ae8a-858acdd04132" />
+<img width="1897" height="854" alt="image" src="https://github.com/user-attachments/assets/85fd3a30-4ea3-43ae-bbda-b89bfcfa7812" />
+<img width="1913" height="853" alt="image" src="https://github.com/user-attachments/assets/e5995e19-676a-4f56-85cf-5475a7d7b001" />
