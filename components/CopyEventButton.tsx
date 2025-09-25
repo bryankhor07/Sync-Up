@@ -2,10 +2,10 @@
 // Marks this file for client-side rendering (required for hooks like useState)
 
 import { VariantProps } from "class-variance-authority";
-// VariantProps is a TypeScript utility type from the class-variance-authority (CVA) library. It’s used to type the props for variants (like size, color, style, etc.)
+// VariantProps is a TypeScript utility type from the class-variance-authority (CVA) library. It's used to type the props for variants (like size, color, style, etc.)
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { CopyIcon } from "lucide-react";
+import { Copy, Check, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -21,16 +21,28 @@ interface CopyEventButtonProps
   clerkUserId: string; // Required: user ID for the booking link
 }
 
-// Returns the appropriate button label based on the current copy state
-function getCopyLabel(state: CopyState) {
+// Returns the appropriate button label and icon based on the current copy state
+function getCopyContent(state: CopyState) {
   switch (state) {
     case "copied":
-      return "Copied!";
+      return {
+        label: "Copied!",
+        icon: Check,
+        className: "text-green-600",
+      };
     case "error":
-      return "Error";
+      return {
+        label: "Error",
+        icon: X,
+        className: "text-red-600",
+      };
     case "idle":
     default:
-      return "Copy Link";
+      return {
+        label: "Copy Link",
+        icon: Copy,
+        className: "",
+      };
   }
 }
 
@@ -39,45 +51,53 @@ export function CopyEventButton({
   eventId,
   clerkUserId,
   className,
-  variant,
+  variant = "outline",
   size,
   ...props // Any other button props like disabled, type, etc.
 }: CopyEventButtonProps) {
   const [copyState, setCopyState] = useState<CopyState>("idle"); // Manage the copy feedback state
 
-  const handleCopy = () => {
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent any default behavior
+    e.stopPropagation(); // Stop event bubbling
+
     const url = `${location.origin}/book/${clerkUserId}/${eventId}`; // Construct the booking URL
 
-    navigator.clipboard
-      .writeText(url) // Try to copy the URL
-      .then(() => {
-        setCopyState("copied"); // On success, show "Copied!" state
-        toast("Link copied successfully.", {
-          duration: 3000,
-        });
-        setTimeout(() => setCopyState("idle"), 2000); // Reset after 2 seconds
-      })
-      .catch(() => {
-        setCopyState("error"); // On failure, show "Error" state
-        setTimeout(() => setCopyState("idle"), 2000); // Reset after 2 seconds
+    try {
+      await navigator.clipboard.writeText(url); // Try to copy the URL
+      setCopyState("copied"); // On success, show "Copied!" state
+      toast("Link copied successfully.", {
+        duration: 3000,
       });
+      setTimeout(() => setCopyState("idle"), 2000); // Reset after 2 seconds
+    } catch (error) {
+      setCopyState("error"); // On failure, show "Error" state
+      toast("Failed to copy link", { duration: 3000 });
+      setTimeout(() => setCopyState("idle"), 2000); // Reset after 2 seconds
+    }
   };
+
+  const {
+    label,
+    icon: Icon,
+    className: stateClassName,
+  } = getCopyContent(copyState);
 
   return (
     <Button
       onClick={handleCopy}
       className={cn(
-        buttonVariants({ variant, size }),
-        "cursor-pointer",
+        "relative z-10 cursor-pointer transition-all duration-200 hover:scale-105",
+        stateClassName,
         className
-      )} // Apply variant/size classes + any custom classes
+      )}
       variant={variant}
       size={size}
+      disabled={copyState === "copied" || copyState === "error"}
       {...props}
     >
-      <CopyIcon className="size-4 mr-2" />{" "}
-      {/* Icon that changes with copy state */}
-      {getCopyLabel(copyState)} {/* Text label that changes with copy state */}
+      <Icon className="w-4 h-4 mr-2" />
+      {label}
     </Button>
   );
 }

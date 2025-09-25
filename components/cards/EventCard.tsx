@@ -11,6 +11,7 @@ import { formatEventDescription } from "@/lib/formatters";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { CopyEventButton } from "../CopyEventButton";
+import { Clock, Edit, Calendar } from "lucide-react";
 
 // Type definition for event card props
 type EventCardProps = {
@@ -32,45 +33,98 @@ export default function EventCard({
   clerkUserId,
 }: EventCardProps) {
   return (
-    <Card
-      className={cn(
-        "flex flex-col border-4 border-blue-500/10 shadow-2xl transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110",
-        !isActive && " bg-accent border-accent"
-      )}
-    >
-      {/* Card header with title and formatted duration */}
-      <CardHeader className={cn(!isActive && "opacity-50")}>
-        <CardTitle>{name}</CardTitle>
-        <CardDescription>
-          {formatEventDescription(durationInMinutes)}
-        </CardDescription>
-      </CardHeader>
+    <div className="group relative">
+      {/* Glow effect */}
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur-sm opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
 
-      {/* Show event description if available */}
-      {description != null && (
-        <CardContent className={cn(!isActive && "opacity-50")}>
-          {description}
-        </CardContent>
-      )}
-
-      {/* Card footer with copy and edit buttons */}
-      <CardFooter className="flex justify-end gap-2 mt-auto">
-        {/* Show copy button only if event is active */}
-        {isActive && (
-          <CopyEventButton
-            variant="outline"
-            eventId={id}
-            clerkUserId={clerkUserId}
-          />
+      <Card
+        className={cn(
+          "relative bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1",
+          "before:absolute before:inset-0 before:rounded-2xl before:border before:border-white/20",
+          !isActive && "opacity-60 hover:opacity-80"
         )}
-        {/* Edit event button */}
-        <Button
-          className="cursor-pointer hover:scale-105 bg-blue-400 hover:bg-blue-600"
-          asChild
-        >
-          <Link href={`/events/${id}/edit`}>Edit</Link>
-        </Button>
-      </CardFooter>
-    </Card>
+      >
+        {/* Status indicator */}
+        <div className="absolute top-4 right-4">
+          <div
+            className={cn(
+              "w-3 h-3 rounded-full shadow-sm",
+              isActive
+                ? "bg-gradient-to-r from-green-400 to-emerald-500 shadow-green-200"
+                : "bg-gradient-to-r from-gray-400 to-gray-500 shadow-gray-200"
+            )}
+          >
+            <div
+              className={cn(
+                "w-full h-full rounded-full animate-ping",
+                isActive ? "bg-green-400" : "bg-gray-400"
+              )}
+            ></div>
+          </div>
+        </div>
+
+        {/* Card header */}
+        <CardHeader className="pb-3">
+          <div className="flex items-start gap-3">
+            <div
+              className={cn(
+                "p-2.5 rounded-xl shrink-0 shadow-sm",
+                isActive
+                  ? "bg-gradient-to-r from-indigo-500 to-purple-600"
+                  : "bg-gradient-to-r from-gray-400 to-gray-500"
+              )}
+            >
+              <Calendar className="w-5 h-5 text-white" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <CardTitle className="text-lg font-bold text-gray-800 truncate">
+                {name}
+              </CardTitle>
+              <CardDescription className="flex items-center gap-2 text-gray-600 mt-1">
+                <Clock className="w-4 h-4" />
+                {formatEventDescription(durationInMinutes)}
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+
+        {/* Description */}
+        {description && (
+          <CardContent className="pt-0 pb-4">
+            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+              {description}
+            </p>
+          </CardContent>
+        )}
+
+        {/* Footer with actions */}
+        <CardFooter className="flex justify-end gap-2 pt-4 border-t border-gray-100/50">
+          {isActive && (
+            <CopyEventButton
+              variant="outline"
+              eventId={id}
+              clerkUserId={clerkUserId}
+              className="bg-white/60 hover:bg-white/80 border-gray-200/50 hover:border-indigo-300 text-gray-700 hover:text-indigo-600 transition-all duration-200 relative z-10"
+            />
+          )}
+
+          <div className="relative group/button">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-0 group-hover/button:opacity-30 transition-opacity duration-200"></div>
+            <Button
+              className="relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 border-0"
+              asChild
+            >
+              <Link
+                href={`/events/${id}/edit`}
+                className="flex items-center gap-2"
+              >
+                <Edit className="w-4 h-4" />
+                Edit
+              </Link>
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

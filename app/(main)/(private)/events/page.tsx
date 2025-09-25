@@ -15,49 +15,78 @@ export default async function EventsPage() {
   const events = await getEvents(userId);
 
   return (
-    <section className="flex flex-col items-center gap-16 animate-fade-in">
-      {/* Page title and "New Event" button */}
-      <div className="flex gap-4 items-baseline">
-        <h1 className="text-4xl xl:text-5xl font-black mb-6">Events</h1>
-        {/* 
-                        Without asChild, the Button would render as:
-                        <button><a href="/dashboard">Go to Dashboard</a></button> <!-- Invalid HTML -->
-                        With asChild, it renders as:
-                        <a href="/dashboard" class="...button styles...">Go to Dashboard</a> <!-- Valid HTML -->
-                        This is useful when you want to make another element (like a <Link>) look and behave like a button without breaking HTML semantics.
-                        */}
-        <Button
-          className="bg-blue-500 hover:bg-blue-400 text-white py-6 hover:scale-110 duration-500 border-b-4 border-blue-700 hover:border-blue-500 rounded-2xl shadow-accent-foreground text-2xl font-black"
-          asChild
-        >
-          <Link href="/events/new">
-            <CalendarPlus className="mr-4 size-7" /> Create Event
-          </Link>
-        </Button>
-      </div>
+    <div className="flex flex-col items-center gap-8 mb-16 animate-fade-in">
+      {/* Page title and "Create Event" button */}
+      <div className="flex flex-col lg:flex-row gap-6 items-center">
+        <h1 className="text-5xl xl:text-6xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-center">
+          Events
+        </h1>
 
-      {/* Show event cards if any exist, otherwise show empty state */}
-      {events.length > 0 ? (
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-10">
-          {events.map((event) => (
-            <EventCard key={event.id} {...event} />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center gap-4">
-          <CalendarRange className="size-16 mx-auto text-black" />
-          You do not have any events yet. Create your first event to get
-          started!
+        {/* Create Event Button */}
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
           <Button
-            className="bg-blue-500 hover:bg-blue-400 text-white py-6 hover:scale-110 duration-500 border-b-4 border-blue-700 hover:border-blue-500 rounded-2xl shadow-accent-foreground shadow-2xl text-2xl font-black"
+            className="relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-6 text-xl font-black rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-0"
             asChild
           >
-            <Link href="/events/new">
-              <CalendarPlus className="mr-4 size-7" /> New Event
+            <Link href="/events/new" className="flex items-center gap-3">
+              <CalendarPlus className="w-7 h-7" />
+              Create Event
+              <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-700 transform skew-x-12"></div>
             </Link>
           </Button>
         </div>
+      </div>
+      {/* Show event cards if any exist, otherwise show empty state */}
+      {events.length > 0 ? (
+        <div className="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {events.map((event, index) => (
+            <div
+              key={event.id}
+              className="animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <EventCard {...event} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* Empty State */
+        <div className="flex flex-col items-center gap-8 animate-fade-in">
+          <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 border border-white/20 shadow-xl max-w-2xl mx-auto text-center">
+            <div className="mb-8">
+              <div className="relative inline-block">
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+                <div className="relative bg-gradient-to-r from-indigo-100 to-purple-100 p-6 rounded-full">
+                  <CalendarRange className="w-16 h-16 text-gray-400" />
+                </div>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              No events yet
+            </h2>
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              You do not have any events yet. Create your first event to get
+              started!
+            </p>
+
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
+              <Button
+                className="relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-6 text-xl font-black rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-0"
+                asChild
+              >
+                <Link href="/events/new" className="flex items-center gap-3">
+                  <CalendarPlus className="w-7 h-7" />
+                  New Event
+                  <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-700 transform skew-x-12"></div>
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
-    </section>
+    </div>
   );
 }
